@@ -3,16 +3,19 @@
 import { useState } from "react";
 import EntradaEstudiante from "@/src/components/EntradaEstudiante";
 import ListaTemas from "@/src/components/ListaTemas";
+import VistaEpigrafes from "@/src/components/VistaEpigrafes";
 import VistaTema from "@/src/components/VistaTema";
+import VistaEjercicios from "@/src/components/VistaEjercicios";
 import { verificarEstudiante } from "@/src/data/estudiantes";
 import { temas } from "@/src/data/temas";
 
-type Vista = "entrada" | "lista" | "tema";
+type Vista = "entrada" | "lista" | "epigrafes" | "tema" | "ejercicios";
 
 export default function Home() {
   const [vista, setVista] = useState<Vista>("entrada");
   const [nombreEstudiante, setNombreEstudiante] = useState("");
   const [temaActual, setTemaActual] = useState<number | null>(null);
+  const [epigrafeActual, setEpigrafeActual] = useState<number | null>(null);
   const [temasCompletados, setTemasCompletados] = useState<Set<number>>(
     new Set()
   );
@@ -33,23 +36,45 @@ export default function Home() {
 
   const handleSeleccionarTema = (temaId: number) => {
     setTemaActual(temaId);
+    setVista("epigrafes");
+  };
+
+  const handleSeleccionarEpigrafe = (epigrafeId: number) => {
+    setEpigrafeActual(epigrafeId);
     setVista("tema");
+  };
+
+  const handleIrAEjercicios = () => {
+    setVista("ejercicios");
   };
 
   const handleVolverLista = () => {
     setTemaActual(null);
+    setEpigrafeActual(null);
     setVista("lista");
   };
 
-  const handleCompletarTema = (temaId: number) => {
-    setTemasCompletados((prev) => new Set(prev).add(temaId));
+  const handleVolverEpigrafes = () => {
+    setEpigrafeActual(null);
+    setVista("epigrafes");
+  };
+
+  const handleCompletarTema = () => {
+    if (temaActual !== null) {
+      setTemasCompletados((prev) => new Set(prev).add(temaActual));
+    }
     setTimeout(() => {
-      handleVolverLista();
+      handleVolverEpigrafes();
     }, 2000);
   };
 
   const temaSeleccionado =
     temaActual !== null ? temas.find((t) => t.id === temaActual) : null;
+
+  const epigrafeSeleccionado =
+    temaSeleccionado && epigrafeActual !== null
+      ? temaSeleccionado.epigrafes.find((e) => e.id === epigrafeActual)
+      : null;
 
   return (
     <div>
@@ -71,10 +96,25 @@ export default function Home() {
           nombreEstudiante={nombreEstudiante}
         />
       )}
-      {vista === "tema" && temaSeleccionado && (
+      {vista === "epigrafes" && temaSeleccionado && (
+        <VistaEpigrafes
+          tema={temaSeleccionado}
+          onSeleccionarEpigrafe={handleSeleccionarEpigrafe}
+          onIrAEjercicios={handleIrAEjercicios}
+          onVolver={handleVolverLista}
+        />
+      )}
+      {vista === "tema" && temaSeleccionado && epigrafeSeleccionado && (
         <VistaTema
           tema={temaSeleccionado}
-          onVolver={handleVolverLista}
+          epigrafe={epigrafeSeleccionado}
+          onVolver={handleVolverEpigrafes}
+        />
+      )}
+      {vista === "ejercicios" && temaSeleccionado && (
+        <VistaEjercicios
+          tema={temaSeleccionado}
+          onVolver={handleVolverEpigrafes}
           onCompletar={handleCompletarTema}
         />
       )}
