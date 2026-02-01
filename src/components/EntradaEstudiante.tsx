@@ -22,10 +22,10 @@ export default function EntradaEstudiante({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-purple-50 to-indigo-50">
       <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-md w-full mx-4">
         <div className="text-center mb-8">
-          <div className="inline-block p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
+          <div className="inline-block p-4 bg-linear-to-r from-blue-500 to-purple-600 rounded-full mb-4">
             <svg
               className="w-12 h-12 text-white"
               fill="none"
@@ -41,10 +41,11 @@ export default function EntradaEstudiante({
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Preparación para Ingreso
+            Preparación para la Prueba de Ingreso
           </h1>
           <p className="text-gray-600">
-            Bienvenido al sistema de preparación matemática
+            Bienvenido al sistema de preparación para la prueba de ingreso de
+            matemática
           </p>
         </div>
 
@@ -65,14 +66,14 @@ export default function EntradaEstudiante({
                 setError("");
               }}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-800"
-              placeholder="Ej: Juan Pérez"
+              placeholder="Ej: Juan Perez"
             />
             {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+            className="w-full bg-linear-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg cursor-pointer"
           >
             Comenzar Preparación
           </button>
@@ -80,9 +81,8 @@ export default function EntradaEstudiante({
 
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center">
-            Estudiantes registrados: Juan Pérez, María García, Carlos López, Ana
-            Martínez, Pedro Rodríguez, Laura Fernández, Diego Muñoz, Sofía
-            Ramírez
+            © 2026 Preparación para las Pruebas de Ingreso. Todos los derechos
+            reservados. Equipo de Desarrollo `MuñozCorp`.
           </p>
         </div>
       </div>

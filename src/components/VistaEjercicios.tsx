@@ -20,7 +20,7 @@ export default function VistaEjercicios({
   >(null);
   const [mostrarResultado, setMostrarResultado] = useState(false);
   const [ejerciciosCompletados, setEjerciciosCompletados] = useState<boolean[]>(
-    new Array(tema.ejercicios.length).fill(false)
+    new Array(tema.ejercicios.length).fill(false),
   );
 
   const ejercicio = tema.ejercicios[ejercicioActual];
@@ -56,9 +56,8 @@ export default function VistaEjercicios({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
       <div className="max-w-3xl mx-auto">
-        {/* Header */}
         <div className="mb-6">
           <button
             onClick={onVolver}
@@ -85,7 +84,6 @@ export default function VistaEjercicios({
           </h2>
         </div>
 
-        {/* Progreso */}
         <div className="bg-white rounded-xl shadow-lg p-4 mb-6">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-semibold text-gray-700">
@@ -98,7 +96,7 @@ export default function VistaEjercicios({
           </div>
           <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-blue-500 to-purple-600 h-full transition-all duration-500"
+              className="bg-linear-to-r from-blue-500 to-purple-600 h-full transition-all duration-500"
               style={{
                 width: `${
                   (ejerciciosCompletados.filter((c) => c).length /
@@ -110,10 +108,9 @@ export default function VistaEjercicios({
           </div>
         </div>
 
-        {/* Ejercicio actual */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-6">
-            <div className="inline-block p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-4">
+            <div className="inline-block p-3 bg-linear-to-r from-blue-500 to-purple-600 rounded-full mb-4">
               <svg
                 className="w-8 h-8 text-white"
                 fill="none"
@@ -176,7 +173,7 @@ export default function VistaEjercicios({
             <button
               onClick={handleVerificarRespuesta}
               disabled={respuestaSeleccionada === null}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-linear-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               Verificar Respuesta
             </button>
@@ -221,7 +218,7 @@ export default function VistaEjercicios({
                   ejercicioActual < tema.ejercicios.length - 1 && (
                     <button
                       onClick={handleSiguienteEjercicio}
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors"
+                      className="bg-linear-to-r from-blue-500 to-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-colors"
                     >
                       Siguiente Ejercicio →
                     </button>
@@ -231,7 +228,7 @@ export default function VistaEjercicios({
                   todosCompletados && (
                     <button
                       onClick={handleSiguienteEjercicio}
-                      className="bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-green-600 hover:to-green-700 transition-colors"
+                      className="bg-linear-to-r from-green-500 to-green-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-green-600 hover:to-green-700 transition-colors"
                     >
                       Finalizar ✓
                     </button>

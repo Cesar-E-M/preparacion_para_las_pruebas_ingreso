@@ -1,17 +1,17 @@
 // Base de datos simulada de estudiantes registrados
 export const estudiantesRegistrados = [
-  "Juan Pérez",
-  "María García",
-  "Carlos López",
-  "Ana Martínez",
-  "Pedro Rodríguez",
-  "Laura Fernández",
+  "Juan Perez",
+  "Maria Garcia",
+  "Carlos LLopez",
+  "Ana Martinez",
+  "Pedro Rodriguez",
+  "Laura Fernandez",
   "Diego Muñoz",
-  "Sofía Ramírez",
+  "Sofia Ramirez",
 ];
 
 export const verificarEstudiante = (nombre: string): boolean => {
   return estudiantesRegistrados.some(
-    (estudiante) => estudiante.toLowerCase() === nombre.toLowerCase().trim()
+    (estudiante) => estudiante.toLowerCase() === nombre.toLowerCase().trim(),
   );
 };

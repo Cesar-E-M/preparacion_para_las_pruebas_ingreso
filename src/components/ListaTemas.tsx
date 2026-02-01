@@ -6,6 +6,8 @@ interface ListaTemasProps {
   temas: Tema[];
   progreso: Set<number>;
   onSeleccionarTema: (temaId: number) => void;
+  onCambiarEstudiante: () => void;
+  onIrAEjerciciosVariados: () => void;
   nombreEstudiante: string;
 }
 
@@ -13,13 +15,37 @@ export default function ListaTemas({
   temas,
   progreso,
   onSeleccionarTema,
+  onCambiarEstudiante,
+  onIrAEjerciciosVariados,
   nombreEstudiante,
 }: ListaTemasProps) {
+  const todosCompletados = progreso.size === temas.length;
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={onCambiarEstudiante}
+              className="flex items-center text-gray-600 hover:text-gray-800 transition-colors cursor-pointer"
+            >
+              <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Cambiar estudiante
+            </button>
+          </div>
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
@@ -39,7 +65,7 @@ export default function ListaTemas({
           <div className="mt-4">
             <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-blue-500 to-purple-600 h-full transition-all duration-500"
+                className="bg-linear-to-r from-blue-500 to-purple-600 h-full transition-all duration-500"
                 style={{
                   width: `${(progreso.size / temas.length) * 100}%`,
                 }}
@@ -48,7 +74,42 @@ export default function ListaTemas({
           </div>
         </div>
 
-        {/* Lista de temas */}
+        <div
+          className={`rounded-xl shadow-xl p-6 mb-6 transition-all ${
+            todosCompletados
+              ? "bg-linear-to-r from-purple-600 to-pink-600 text-white"
+              : "bg-gray-300 text-gray-600"
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold mb-2">
+                🎯 Ejercicios Variados
+              </h3>
+              <p
+                className={
+                  todosCompletados ? "text-purple-100" : "text-gray-700"
+                }
+              >
+                {todosCompletados
+                  ? "¡Felicidades! Has completado todos los temas. Ahora practica con ejercicios variados."
+                  : "Completa todos los temas para desbloquear los ejercicios variados"}
+              </p>
+            </div>
+            <button
+              onClick={todosCompletados ? onIrAEjerciciosVariados : undefined}
+              disabled={!todosCompletados}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all shadow-lg ${
+                todosCompletados
+                  ? "bg-white text-purple-600 hover:bg-purple-50 hover:scale-105 cursor-pointer"
+                  : "bg-gray-400 text-gray-600 cursor-not-allowed opacity-60"
+              }`}
+            >
+              {todosCompletados ? "Comenzar" : "🔒 Bloqueado"}
+            </button>
+          </div>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2">
           {temas.map((tema) => {
             const completado = progreso.has(tema.id);

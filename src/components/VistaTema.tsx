@@ -14,9 +14,8 @@ export default function VistaTema({
   onVolver,
 }: VistaTemaProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
       <div className="max-w-3xl mx-auto">
-        {/* Header */}
         <div className="mb-6">
           <button
             onClick={onVolver}
@@ -43,7 +42,6 @@ export default function VistaTema({
           </h2>
         </div>
 
-        {/* Contenido del epígrafe */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="space-y-4">
             {epigrafe.contenido.map((parrafo, index) => (
