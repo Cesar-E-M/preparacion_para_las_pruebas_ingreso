@@ -99,6 +99,11 @@ export default function Home() {
     setVista("ejercicios-variados");
   };
 
+  const handleIrATemaDesdeVariados = (temaId: number) => {
+    setTemaActual(temaId);
+    setVista("epigrafes");
+  };
+
   const handleVolverLista = () => {
     setTemaActual(null);
     setEpigrafeActual(null);
@@ -180,7 +185,11 @@ export default function Home() {
         />
       )}
       {vista === "ejercicios-variados" && (
-        <VistaEjerciciosVariados temas={temas} onVolver={handleVolverLista} />
+        <VistaEjerciciosVariados
+          temas={temas}
+          onVolver={handleVolverLista}
+          onIrATema={handleIrATemaDesdeVariados}
+        />
       )}
     </div>
   );

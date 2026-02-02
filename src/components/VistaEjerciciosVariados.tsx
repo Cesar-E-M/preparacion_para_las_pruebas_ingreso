@@ -1,32 +1,98 @@
+/* eslint-disable react-hooks/purity */
 "use client";
 
 import { useState, useMemo } from "react";
 import { Tema, Ejercicio } from "@/src/data/temas";
+import { ejerciciosAdicionales } from "@/src/data/ejercicios";
 
 interface VistaEjerciciosVariadosProps {
   temas: Tema[];
   onVolver: () => void;
+  onIrATema: (temaId: number) => void;
 }
 
 export default function VistaEjerciciosVariados({
   temas,
   onVolver,
+  onIrATema,
 }: VistaEjerciciosVariadosProps) {
-  // Obtener todos los ejercicios de todos los temas
   const todosLosEjercicios = useMemo(() => {
-    const ejercicios: Array<
-      Ejercicio & { temaId: number; temaTitulo: string }
-    > = [];
+    // Agrupar ejercicios por tema
+    const ejerciciosPorTema: {
+      [temaId: number]: Array<
+        Ejercicio & { temaId: number; temaTitulo: string }
+      >;
+    } = {};
+
+    // Agregar ejercicios de cada tema
     temas.forEach((tema) => {
+      if (!ejerciciosPorTema[tema.id]) {
+        ejerciciosPorTema[tema.id] = [];
+      }
       tema.ejercicios.forEach((ejercicio) => {
-        ejercicios.push({
+        ejerciciosPorTema[tema.id].push({
           ...ejercicio,
           temaId: tema.id,
           temaTitulo: tema.titulo,
         });
       });
     });
-    return ejercicios.sort();
+
+    // Agregar ejercicios adicionales
+    ejerciciosAdicionales.forEach((ejercicio) => {
+      if (!ejerciciosPorTema[ejercicio.temaId]) {
+        ejerciciosPorTema[ejercicio.temaId] = [];
+      }
+      ejerciciosPorTema[ejercicio.temaId].push(ejercicio);
+    });
+
+    const ejerciciosSeleccionados: Array<
+      Ejercicio & { temaId: number; temaTitulo: string }
+    > = [];
+    const todosLosEjerciciosDisponibles: Array<
+      Ejercicio & { temaId: number; temaTitulo: string }
+    > = [];
+
+    // Seleccionar al menos un ejercicio aleatorio de cada tema
+    Object.keys(ejerciciosPorTema).forEach((temaIdStr) => {
+      const temaId = parseInt(temaIdStr);
+      const ejerciciosTema = ejerciciosPorTema[temaId];
+
+      if (ejerciciosTema.length > 0) {
+        // Seleccionar uno aleatorio para garantizar representación
+        const indiceAleatorio = Math.floor(
+          Math.random() * ejerciciosTema.length,
+        );
+        ejerciciosSeleccionados.push(ejerciciosTema[indiceAleatorio]);
+
+        // Agregar el resto a la lista de disponibles
+        ejerciciosTema.forEach((ej, index) => {
+          if (index !== indiceAleatorio) {
+            todosLosEjerciciosDisponibles.push(ej);
+          }
+        });
+      }
+    });
+
+    // Completar hasta 10 ejercicios con ejercicios aleatorios del resto
+    const ejerciciosRestantes = 10 - ejerciciosSeleccionados.length;
+
+    // Mezclar los disponibles
+    const disponiblesMezclados = todosLosEjerciciosDisponibles.sort(
+      () => Math.random() - 0.5,
+    );
+
+    // Agregar los ejercicios restantes hasta llegar a 10
+    for (
+      let i = 0;
+      i < Math.min(ejerciciosRestantes, disponiblesMezclados.length);
+      i++
+    ) {
+      ejerciciosSeleccionados.push(disponiblesMezclados[i]);
+    }
+
+    // Mezclar todos los ejercicios seleccionados
+    return ejerciciosSeleccionados.sort(() => Math.random() - 0.5);
   }, [temas]);
 
   const [ejercicioActual, setEjercicioActual] = useState(0);
@@ -37,6 +103,7 @@ export default function VistaEjerciciosVariados({
   const [ejerciciosCompletados, setEjerciciosCompletados] = useState<boolean[]>(
     new Array(todosLosEjercicios.length).fill(false),
   );
+  const [mostrarResultadoFinal, setMostrarResultadoFinal] = useState(false);
 
   const ejercicio = todosLosEjercicios[ejercicioActual];
   const esRespuestaCorrecta =
@@ -59,6 +126,9 @@ export default function VistaEjerciciosVariados({
       setEjercicioActual(ejercicioActual + 1);
       setRespuestaSeleccionada(null);
       setMostrarResultado(false);
+    } else {
+      // Es el último ejercicio, mostrar resultados finales
+      setMostrarResultadoFinal(true);
     }
   };
 
@@ -71,44 +141,9 @@ export default function VistaEjerciciosVariados({
     setEjercicioActual(0);
     setRespuestaSeleccionada(null);
     setMostrarResultado(false);
+    setMostrarResultadoFinal(false);
     setEjerciciosCompletados(new Array(todosLosEjercicios.length).fill(false));
   };
-
-  if (todosLosEjercicios.length === 0) {
-    return (
-      <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
-        <div className="max-w-3xl mx-auto">
-          <button
-            onClick={onVolver}
-            className="flex items-center text-gray-600 hover:text-gray-800 transition-colors mb-4 cursor-pointer"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Volver a temas
-          </button>
-          <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              No hay ejercicios disponibles
-            </h2>
-            <p className="text-gray-600">
-              Todavía no hay ejercicios cargados en los temas.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 via-purple-50 to-indigo-50 py-8 px-4">
@@ -160,137 +195,241 @@ export default function VistaEjerciciosVariados({
           </div>
         </div>
 
-        {todosCompletados && (
-          <div className="bg-green-100 border-2 border-green-500 rounded-xl p-6 mb-6 text-center">
-            <div className="text-4xl mb-2">🎉</div>
-            <h3 className="text-2xl font-bold text-green-800 mb-2">
-              ¡Felicitaciones!
-            </h3>
-            <p className="text-green-700 mb-4">
-              Has completado todos los ejercicios variados correctamente
-            </p>
-            <p className="text-lg font-semibold text-green-800">
-              Respuestas correctas: {cantidadCorrectas} de{" "}
-              {todosLosEjercicios.length}
-            </p>
-            <button
-              onClick={handleReiniciar}
-              className="mt-4 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Reiniciar ejercicios
-            </button>
-          </div>
-        )}
-
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-sm font-semibold text-gray-500">
-              Ejercicio {ejercicioActual + 1} de {todosLosEjercicios.length}
-            </span>
-            <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
-              {ejercicio.temaTitulo}
-            </span>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
-              {ejercicio.pregunta}
-            </h3>
-          </div>
-
-          <div className="space-y-3 mb-6">
-            {ejercicio.opciones.map((opcion, index) => (
-              <button
-                key={index}
-                onClick={() =>
-                  !mostrarResultado && setRespuestaSeleccionada(index)
-                }
-                disabled={mostrarResultado}
-                className={`w-full p-4 rounded-lg text-left transition-all text-black ${
-                  respuestaSeleccionada === index
-                    ? mostrarResultado
-                      ? index === ejercicio.respuestaCorrecta
-                        ? "bg-green-100 border-2 border-green-500 text-green-800"
-                        : "bg-red-100 border-2 border-red-500 text-red-800"
-                      : "bg-purple-100 border-2 border-purple-500"
-                    : mostrarResultado && index === ejercicio.respuestaCorrecta
-                      ? "bg-green-100 border-2 border-green-500 text-green-800"
-                      : "bg-gray-50 border-2 border-gray-200 hover:border-purple-300"
-                } ${mostrarResultado ? "cursor-default" : "cursor-pointer"}`}
-              >
-                <div className="flex items-center">
-                  <span className="font-semibold mr-3">
-                    {String.fromCharCode(65 + index)}.
-                  </span>
-                  <span>{opcion}</span>
-                  {mostrarResultado &&
-                    index === ejercicio.respuestaCorrecta && (
-                      <span className="ml-auto text-green-600">✓</span>
-                    )}
-                  {mostrarResultado &&
-                    respuestaSeleccionada === index &&
-                    index !== ejercicio.respuestaCorrecta && (
-                      <span className="ml-auto text-red-600">✗</span>
-                    )}
+        {mostrarResultadoFinal ? (
+          // Pantalla de resultados finales
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            {todosCompletados ? (
+              // Todos correctos
+              <div className="text-center">
+                <div className="text-6xl mb-4">🎉</div>
+                <h3 className="text-3xl font-bold text-green-800 mb-4">
+                  ¡Felicitaciones!
+                </h3>
+                <p className="text-xl text-green-700 mb-6">
+                  Has completado todos los ejercicios variados correctamente
+                </p>
+                <p className="text-2xl font-semibold text-green-800 mb-6">
+                  {cantidadCorrectas} de {todosLosEjercicios.length} correctas
+                </p>
+                <div className="bg-blue-50 border-2 border-blue-300 rounded-lg p-4 mb-6">
+                  <p className="text-blue-800 font-semibold mb-3">
+                    🎁 ¡Descarga más ejercicios para seguir practicando!
+                  </p>
+                  <a
+                    href="/PI-1998 -2025.pdf"
+                    download="Ejercicios_Adicionales.pdf"
+                    className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                  >
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    Descargar ejercicios adicionales
+                  </a>
                 </div>
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-3">
-            {!mostrarResultado ? (
-              <button
-                onClick={handleVerificarRespuesta}
-                disabled={respuestaSeleccionada === null}
-                className={`flex-1 py-3 rounded-lg font-semibold transition-all ${
-                  respuestaSeleccionada !== null
-                    ? "bg-purple-600 text-white hover:bg-purple-700 cursor-pointer"
-                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                Verificar Respuesta
-              </button>
+                <div className="flex gap-3 justify-center">
+                  <button
+                    onClick={handleReiniciar}
+                    className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold"
+                  >
+                    Reiniciar ejercicios
+                  </button>
+                  <button
+                    onClick={onVolver}
+                    className="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+                  >
+                    Volver a temas
+                  </button>
+                </div>
+              </div>
             ) : (
-              <>
-                {!esRespuestaCorrecta && (
+              // Algunos incorrectos
+              <div>
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">😕</div>
+                  <h3 className="text-3xl font-bold text-orange-800 mb-4">
+                    ¡Ups!
+                  </h3>
+                  <p className="text-xl text-gray-700 mb-4">
+                    Necesitas repasar algunos temas
+                  </p>
+                  <p className="text-2xl font-semibold text-gray-800">
+                    {cantidadCorrectas} de {todosLosEjercicios.length} correctas
+                  </p>
+                </div>
+
+                <div className="mb-6">
+                  <h4 className="text-lg font-bold text-gray-800 mb-3">
+                    Ejercicios incorrectos:
+                  </h4>
+                  <div className="space-y-3">
+                    {todosLosEjercicios.map(
+                      (ej, index) =>
+                        !ejerciciosCompletados[index] && (
+                          <div
+                            key={index}
+                            className="bg-red-50 border-2 border-red-200 rounded-lg p-4"
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <span className="inline-block bg-red-500 text-white text-xs font-bold px-2 py-1 rounded mb-2">
+                                  {ej.temaTitulo}
+                                </span>
+                                <p className="text-gray-800 font-medium">
+                                  {ej.pregunta}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => onIrATema(ej.temaId)}
+                                className="ml-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold whitespace-nowrap"
+                              >
+                                Estudiar tema
+                              </button>
+                            </div>
+                          </div>
+                        ),
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-3 justify-center">
                   <button
-                    onClick={handleIntentarNuevo}
-                    className="flex-1 py-3 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all cursor-pointer"
+                    onClick={handleReiniciar}
+                    className="px-8 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
                   >
-                    Intentar de nuevo
+                    Reintentar ejercicios
                   </button>
-                )}
-                {(esRespuestaCorrecta ||
-                  ejercicioActual < todosLosEjercicios.length - 1) && (
                   <button
-                    onClick={handleSiguienteEjercicio}
-                    className="flex-1 py-3 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition-all cursor-pointer"
+                    onClick={onVolver}
+                    className="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold"
                   >
-                    {ejercicioActual < todosLosEjercicios.length - 1
-                      ? "Siguiente Ejercicio"
-                      : "Finalizar"}
+                    Volver a temas
                   </button>
-                )}
-              </>
+                </div>
+              </div>
             )}
           </div>
-
-          {mostrarResultado && (
-            <div
-              className={`mt-4 p-4 rounded-lg ${
-                esRespuestaCorrecta
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800"
-              }`}
-            >
-              <p className="font-semibold">
-                {esRespuestaCorrecta
-                  ? "¡Correcto! Excelente trabajo."
-                  : "Incorrecto. Revisa tu respuesta e inténtalo de nuevo."}
-              </p>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <div className="flex items-center justify-between mb-6">
+              <span className="text-sm font-semibold text-gray-500">
+                Ejercicio {ejercicioActual + 1} de {todosLosEjercicios.length}
+              </span>
+              <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
+                {ejercicio.temaTitulo}
+              </span>
             </div>
-          )}
-        </div>
+
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                {ejercicio.pregunta}
+              </h3>
+            </div>
+
+            <div className="space-y-3 mb-6">
+              {ejercicio.opciones.map((opcion, index) => (
+                <button
+                  key={index}
+                  onClick={() =>
+                    !mostrarResultado && setRespuestaSeleccionada(index)
+                  }
+                  disabled={mostrarResultado}
+                  className={`w-full p-4 rounded-lg text-left transition-all text-black ${
+                    respuestaSeleccionada === index
+                      ? mostrarResultado
+                        ? index === ejercicio.respuestaCorrecta
+                          ? "bg-green-100 border-2 border-green-500 text-green-800"
+                          : "bg-red-100 border-2 border-red-500 text-red-800"
+                        : "bg-purple-100 border-2 border-purple-500"
+                      : mostrarResultado &&
+                          index === ejercicio.respuestaCorrecta
+                        ? "bg-green-100 border-2 border-green-500 text-green-800"
+                        : "bg-gray-50 border-2 border-gray-200 hover:border-purple-300"
+                  } ${mostrarResultado ? "cursor-default" : "cursor-pointer"}`}
+                >
+                  <div className="flex items-center">
+                    <span className="font-semibold mr-3">
+                      {String.fromCharCode(65 + index)}.
+                    </span>
+                    <span>{opcion}</span>
+                    {mostrarResultado &&
+                      index === ejercicio.respuestaCorrecta && (
+                        <span className="ml-auto text-green-600">✓</span>
+                      )}
+                    {mostrarResultado &&
+                      respuestaSeleccionada === index &&
+                      index !== ejercicio.respuestaCorrecta && (
+                        <span className="ml-auto text-red-600">✗</span>
+                      )}
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-3">
+              {!mostrarResultado ? (
+                <button
+                  onClick={handleVerificarRespuesta}
+                  disabled={respuestaSeleccionada === null}
+                  className={`flex-1 py-3 rounded-lg font-semibold transition-all ${
+                    respuestaSeleccionada !== null
+                      ? "bg-purple-600 text-white hover:bg-purple-700 cursor-pointer"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  Verificar Respuesta
+                </button>
+              ) : (
+                <>
+                  {!esRespuestaCorrecta && (
+                    <button
+                      onClick={handleIntentarNuevo}
+                      className="flex-1 py-3 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all cursor-pointer"
+                    >
+                      Intentar de nuevo
+                    </button>
+                  )}
+                  {(esRespuestaCorrecta ||
+                    ejercicioActual < todosLosEjercicios.length - 1) && (
+                    <button
+                      onClick={handleSiguienteEjercicio}
+                      className="flex-1 py-3 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition-all cursor-pointer"
+                    >
+                      {ejercicioActual < todosLosEjercicios.length - 1
+                        ? "Siguiente Ejercicio"
+                        : "Finalizar"}
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
+
+            {mostrarResultado && (
+              <div
+                className={`mt-4 p-4 rounded-lg ${
+                  esRespuestaCorrecta
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
+                <p className="font-semibold">
+                  {esRespuestaCorrecta
+                    ? "¡Correcto! Excelente trabajo."
+                    : "Incorrecto. Revisa tu respuesta e inténtalo de nuevo."}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

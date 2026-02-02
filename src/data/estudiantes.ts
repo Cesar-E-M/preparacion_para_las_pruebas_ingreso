@@ -1,13 +1,11 @@
 // Base de datos simulada de estudiantes registrados
 export const estudiantesRegistrados = [
-  "Juan Perez",
-  "Maria Garcia",
-  "Carlos LLopez",
-  "Ana Martinez",
-  "Pedro Rodriguez",
-  "Laura Fernandez",
-  "Diego Muñoz",
-  "Sofia Ramirez",
+  "Alvaro Sanabria Gomez",
+  "Thalia Campo Valera",
+  "Fabio Castillo",
+  "Jose Miguel Betancourt",
+  "Franco Valdez de la Cruz",
+  "Diego Jose Muñoz Orellana",
 ];
 
 export const verificarEstudiante = (nombre: string): boolean => {
