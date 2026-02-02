@@ -1,5 +1,4 @@
 // Ejercicios adicionales para la sección de Ejercicios Variados
-// Estos ejercicios son complementarios a los que ya existen en cada tema
 
 export interface EjercicioAdicional {
   pregunta: string;
@@ -10,7 +9,6 @@ export interface EjercicioAdicional {
 }
 
 export const ejerciciosAdicionales: EjercicioAdicional[] = [
-  // Ejercicios adicionales de Conjuntos y Dominios Numéricos (Tema 1)
   {
     pregunta:
       "¿Cuál de los siguientes números NO pertenece al conjunto de los números racionales (ℚ)?",
@@ -34,7 +32,6 @@ export const ejerciciosAdicionales: EjercicioAdicional[] = [
     temaTitulo: "Conjuntos y Dominios Numericos",
   },
 
-  // Ejercicios adicionales de Funciones (Tema 2)
   {
     pregunta: "¿Cuál es el rango de la función f(x) = x² para x ∈ ℝ?",
     opciones: ["ℝ", "[0, ∞)", "(-∞, 0]", "(0, ∞)"],
@@ -62,7 +59,6 @@ export const ejerciciosAdicionales: EjercicioAdicional[] = [
     temaTitulo: "Funciones",
   },
 
-  // Ejercicios adicionales de Geometría Analítica (Tema 3)
   {
     pregunta: "¿Cuál es la distancia entre los puntos A(1, 2) y B(4, 6)?",
     opciones: ["5", "7", "3", "25"],
@@ -85,7 +81,6 @@ export const ejerciciosAdicionales: EjercicioAdicional[] = [
     temaTitulo: "Geometria Analitica 2",
   },
 
-  // Ejercicios adicionales de Progresiones e Inecuaciones (Tema 4)
   {
     pregunta:
       "En una progresión aritmética, el primer término es 5 y la diferencia común es 3. ¿Cuál es el quinto término?",
@@ -110,7 +105,6 @@ export const ejerciciosAdicionales: EjercicioAdicional[] = [
     temaTitulo: "Progresiones e Inecuaciones",
   },
 
-  // Ejercicios adicionales de Trigonometría (Tema 5)
   {
     pregunta: "¿Cuánto es tan(45°)?",
     opciones: ["1", "√2", "1/2", "√3/2"],

@@ -17,14 +17,12 @@ export default function VistaEjerciciosVariados({
   onIrATema,
 }: VistaEjerciciosVariadosProps) {
   const todosLosEjercicios = useMemo(() => {
-    // Agrupar ejercicios por tema
     const ejerciciosPorTema: {
       [temaId: number]: Array<
         Ejercicio & { temaId: number; temaTitulo: string }
       >;
     } = {};
 
-    // Agregar ejercicios de cada tema
     temas.forEach((tema) => {
       if (!ejerciciosPorTema[tema.id]) {
         ejerciciosPorTema[tema.id] = [];
@@ -38,7 +36,6 @@ export default function VistaEjerciciosVariados({
       });
     });
 
-    // Agregar ejercicios adicionales
     ejerciciosAdicionales.forEach((ejercicio) => {
       if (!ejerciciosPorTema[ejercicio.temaId]) {
         ejerciciosPorTema[ejercicio.temaId] = [];
@@ -53,19 +50,16 @@ export default function VistaEjerciciosVariados({
       Ejercicio & { temaId: number; temaTitulo: string }
     > = [];
 
-    // Seleccionar al menos un ejercicio aleatorio de cada tema
     Object.keys(ejerciciosPorTema).forEach((temaIdStr) => {
       const temaId = parseInt(temaIdStr);
       const ejerciciosTema = ejerciciosPorTema[temaId];
 
       if (ejerciciosTema.length > 0) {
-        // Seleccionar uno aleatorio para garantizar representación
         const indiceAleatorio = Math.floor(
           Math.random() * ejerciciosTema.length,
         );
         ejerciciosSeleccionados.push(ejerciciosTema[indiceAleatorio]);
 
-        // Agregar el resto a la lista de disponibles
         ejerciciosTema.forEach((ej, index) => {
           if (index !== indiceAleatorio) {
             todosLosEjerciciosDisponibles.push(ej);
@@ -74,15 +68,12 @@ export default function VistaEjerciciosVariados({
       }
     });
 
-    // Completar hasta 10 ejercicios con ejercicios aleatorios del resto
     const ejerciciosRestantes = 10 - ejerciciosSeleccionados.length;
 
-    // Mezclar los disponibles
     const disponiblesMezclados = todosLosEjerciciosDisponibles.sort(
       () => Math.random() - 0.5,
     );
 
-    // Agregar los ejercicios restantes hasta llegar a 10
     for (
       let i = 0;
       i < Math.min(ejerciciosRestantes, disponiblesMezclados.length);
@@ -91,7 +82,6 @@ export default function VistaEjerciciosVariados({
       ejerciciosSeleccionados.push(disponiblesMezclados[i]);
     }
 
-    // Mezclar todos los ejercicios seleccionados
     return ejerciciosSeleccionados.sort(() => Math.random() - 0.5);
   }, [temas]);
 
@@ -127,7 +117,6 @@ export default function VistaEjerciciosVariados({
       setRespuestaSeleccionada(null);
       setMostrarResultado(false);
     } else {
-      // Es el último ejercicio, mostrar resultados finales
       setMostrarResultadoFinal(true);
     }
   };
@@ -196,10 +185,8 @@ export default function VistaEjerciciosVariados({
         </div>
 
         {mostrarResultadoFinal ? (
-          // Pantalla de resultados finales
           <div className="bg-white rounded-2xl shadow-xl p-8">
             {todosCompletados ? (
-              // Todos correctos
               <div className="text-center">
                 <div className="text-6xl mb-4">🎉</div>
                 <h3 className="text-3xl font-bold text-green-800 mb-4">
@@ -252,7 +239,6 @@ export default function VistaEjerciciosVariados({
                 </div>
               </div>
             ) : (
-              // Algunos incorrectos
               <div>
                 <div className="text-center mb-6">
                   <div className="text-6xl mb-4">😕</div>
