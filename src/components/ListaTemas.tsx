@@ -1,6 +1,6 @@
 "use client";
 
-import { Tema } from "@/src/data/temas";
+import { Tema } from "@/src/data/matematica/temas";
 
 interface ListaTemasProps {
   temas: Tema[];
@@ -9,6 +9,7 @@ interface ListaTemasProps {
   onCambiarEstudiante: () => void;
   onIrAEjerciciosVariados: () => void;
   nombreEstudiante: string;
+  textoBotonVolver?: string;
 }
 
 export default function ListaTemas({
@@ -18,6 +19,7 @@ export default function ListaTemas({
   onCambiarEstudiante,
   onIrAEjerciciosVariados,
   nombreEstudiante,
+  textoBotonVolver = "Cambiar estudiante",
 }: ListaTemasProps) {
   const todosCompletados = progreso.size === temas.length;
 
@@ -43,7 +45,7 @@ export default function ListaTemas({
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-              Cambiar estudiante
+              {textoBotonVolver}
             </button>
           </div>
           <div className="flex items-center justify-between">

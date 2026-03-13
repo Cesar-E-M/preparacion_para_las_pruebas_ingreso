@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Preparación para Pruebas de Ingreso - Matemáticas",
-  description: "Sistema de preparación matemática para estudiantes",
+  title: "Preparacion para Pruebas de Ingreso",
+  description: "Sistema de preparacion para estudiantes de 12 grado",
 };
 
 export default function RootLayout({

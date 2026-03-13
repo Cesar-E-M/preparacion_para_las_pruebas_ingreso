@@ -2,8 +2,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Tema, Ejercicio } from "@/src/data/temas";
-import { ejerciciosAdicionales } from "@/src/data/ejercicios";
+import { Tema, Ejercicio } from "@/src/data/matematica/temas";
+import { ejerciciosAdicionales } from "@/src/data/matematica/ejercicios";
 
 interface VistaEjerciciosVariadosProps {
   temas: Tema[];
