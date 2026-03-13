@@ -1,8 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function HistoriaPage() {
+function ContenidoHistoria() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nombre = searchParams.get("nombre")?.trim() || "";
@@ -26,5 +27,13 @@ export default function HistoriaPage() {
         </p>
       </section>
     </main>
+  );
+}
+
+export default function HistoriaPage() {
+  return (
+    <Suspense>
+      <ContenidoHistoria />
+    </Suspense>
   );
 }

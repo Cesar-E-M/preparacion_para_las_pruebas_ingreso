@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const asignaturas = [
@@ -24,7 +24,7 @@ const asignaturas = [
   },
 ];
 
-export default function DashboardPage() {
+function ContenidoDashboard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nombre = searchParams.get("nombre")?.trim() || "";
@@ -89,5 +89,13 @@ export default function DashboardPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense>
+      <ContenidoDashboard />
+    </Suspense>
   );
 }

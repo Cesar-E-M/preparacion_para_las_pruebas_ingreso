@@ -1,8 +1,9 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function EspanolPage() {
+function ContenidoEspanol() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nombre = searchParams.get("nombre")?.trim() || "";
@@ -26,5 +27,13 @@ export default function EspanolPage() {
         </p>
       </section>
     </main>
+  );
+}
+
+export default function EspanolPage() {
+  return (
+    <Suspense>
+      <ContenidoEspanol />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ListaTemas from "@/src/components/ListaTemas";
 import VistaEpigrafes from "@/src/components/VistaEpigrafes";
@@ -47,7 +47,7 @@ const guardarProgreso = (nombreEstudiante: string, progreso: Set<number>) => {
   }
 };
 
-export default function MatematicaPage() {
+function ContenidoMatematica() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nombreEstudiante = searchParams.get("nombre")?.trim() || "";
@@ -166,5 +166,13 @@ export default function MatematicaPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function MatematicaPage() {
+  return (
+    <Suspense>
+      <ContenidoMatematica />
+    </Suspense>
   );
 }

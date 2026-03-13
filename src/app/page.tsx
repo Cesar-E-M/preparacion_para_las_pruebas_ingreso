@@ -133,10 +133,13 @@ export default function Home() {
     <main className="min-h-screen bg-linear-to-br from-sky-50 via-cyan-100 to-indigo-100 flex items-center justify-center p-4">
       <section className="w-full max-w-2xl rounded-3xl bg-white/90 backdrop-blur-xs border border-white shadow-2xl p-6 md:p-10">
         <h1 className="text-3xl md:text-4xl font-black text-slate-900 leading-tight">
-          Plataforma de Preparacion
+          La Bibleoteca Del Saber
         </h1>
         <p className="mt-3 text-slate-700">
-          Accede al contenido de Matematica, Espanol e Historia.
+          Tu plataforma gratuita para prepararte para las pruebas de ingreso a
+          la universidad. Crea tu cuenta o inicia sesion para acceder a recursos
+          de alta calidad y mejorar tus habilidades en matematicas, historia,
+          español.
         </p>
 
         <div className="mt-8 grid grid-cols-2 gap-2 rounded-2xl bg-slate-100 p-1">
@@ -205,8 +208,10 @@ export default function Home() {
         {seccion === "registro" && (
           <>
             <div className="mt-8 space-y-3">
-              <p className="font-semibold text-slate-800">Estas en 12 grado?</p>
-              <div className="flex gap-3">
+              <p className="flex font-semibold text-slate-800 justify-center">
+                Estas en 12 grado?
+              </p>
+              <div className="flex gap-3 justify-center">
                 <button
                   type="button"
                   onClick={() => {
