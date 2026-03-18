@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Tema } from "@/src/data/matematica/temas";
+import { Tema } from "@/src/context/useContext";
 
 interface VistaEjerciciosProps {
   tema: Tema;

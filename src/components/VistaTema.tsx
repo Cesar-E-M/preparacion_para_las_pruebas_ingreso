@@ -1,6 +1,6 @@
 "use client";
 
-import { Tema, Epigrafe } from "@/src/data/matematica/temas";
+import { Tema, Epigrafe } from "@/src/context/useContext";
 
 interface VistaTemaProps {
   tema: Tema;
