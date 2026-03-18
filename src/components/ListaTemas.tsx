@@ -1,6 +1,6 @@
 "use client";
 
-import { Tema } from "@/src/data/matematica/temas";
+import { Tema } from "@/src/context/useContext";
 
 interface ListaTemasProps {
   temas: Tema[];

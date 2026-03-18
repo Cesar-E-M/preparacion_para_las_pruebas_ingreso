@@ -2185,7 +2185,7 @@ del siglo XX.`,
         id: 1,
         titulo:
           "Problemas estructurales de la economía y la alternativa reformista (1935-1940)",
-        contenido: [],
+        contenido: [``],
       },
       {
         id: 2,
