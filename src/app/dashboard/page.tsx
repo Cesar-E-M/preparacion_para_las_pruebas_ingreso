@@ -11,13 +11,13 @@ const asignaturas = [
     activa: true,
   },
   {
-    nombre: "Español",
+    nombre: "Literatura y Lengua",
     descripcion: "Comprension, redaccion y ortografia.",
     ruta: "/dashboard/espanol",
     activa: true,
   },
   {
-    nombre: "Historia",
+    nombre: "Historia De Cuba",
     descripcion: "Procesos historicos y cultura general.",
     ruta: "/dashboard/historia",
     activa: true,
