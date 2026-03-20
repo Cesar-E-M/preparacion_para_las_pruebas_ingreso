@@ -87,6 +87,16 @@ function ContenidoDashboard() {
             </article>
           ))}
         </div>
+        <article className="mt-8 rounded-2xl bg-white/80 border border-cyan-100 p-5 text-center shadow-sm">
+          <p className="text-slate-700 font-medium">
+            “ La tarea mas importante de todos nosotros es preparar el porvenir;
+            nosotros somos en esta hora de la patria, el puño de semillas que se
+            siembra en el surco de la Revolucion para hacer el porvenir. ”
+          </p>
+          <p className="text-slate-700 font-medium mt-3 border-b w-auto mx-auto pb-2 border-cyan-200">
+            Fidel Castro Ruz
+          </p>
+        </article>
       </div>
     </main>
   );
